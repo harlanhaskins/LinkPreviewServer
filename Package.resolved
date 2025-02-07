@@ -1,0 +1,42 @@
+{
+  "originHash" : "38ac31f1113a93eaebb4aba4b5545dc9e8c77023551e97b6d2436de0003d7e71",
+  "pins" : [
+    {
+      "identity" : "flyingfox",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swhitty/FlyingFox.git",
+      "state" : {
+        "revision" : "5653d61252af7f2dd8b43a77fb2a03678290f393",
+        "version" : "0.20.0"
+      }
+    },
+    {
+      "identity" : "linkpreviewswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/harlanhaskins/LinkPreviewSwift.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "242241095444c2ad77cd7a16905c95d1e36b5f3b"
+      }
+    },
+    {
+      "identity" : "swift-argument-parser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-argument-parser",
+      "state" : {
+        "revision" : "41982a3656a71c768319979febd796c6fd111d5c",
+        "version" : "1.5.0"
+      }
+    },
+    {
+      "identity" : "swiftsoup",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/scinfu/SwiftSoup.git",
+      "state" : {
+        "revision" : "6b4930da67b462d3f200472c902dd016d37a554d",
+        "version" : "2.7.7"
+      }
+    }
+  ],
+  "version" : 3
+}
