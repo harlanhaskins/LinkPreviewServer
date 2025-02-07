@@ -54,8 +54,16 @@ struct Main {
     static func main() async throws {
         let server = HTTPServer(port: 8086)
         await server.appendRoute("/preview?url=:url") { request in
-            guard let urlString = request.routeParameters["url"],
-                  let url = URL(string: urlString) else {
+            guard var urlString = request.routeParameters["url"] else {
+                return HTTPResponse(statusCode: .badRequest)
+            }
+
+            // Prepend HTTPS if not provided
+            if !urlString.hasPrefix("http://") && !urlString.hasPrefix("https://") {
+                urlString = "https://\(urlString)"
+            }
+
+            guard let url = URL(string: urlString) else {
                 return HTTPResponse(statusCode: .badRequest)
             }
 
