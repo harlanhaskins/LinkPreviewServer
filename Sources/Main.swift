@@ -2,7 +2,7 @@ import Foundation
 import FlyingFox
 import LinkPreview
 
-struct AVPreview: Codable {
+struct MediaMetadata: Codable {
     var url: URL?
     var width: Int?
     var height: Int?
@@ -25,8 +25,8 @@ struct LinkPreviewResponse: Codable {
     var title: String?
     var description: String?
     var canonicalURL: URL?
-    var image: AVPreview?
-    var video: AVPreview?
+    var image: MediaMetadata?
+    var video: MediaMetadata?
     var audioURL: URL?
     var faviconURL: URL?
 }
@@ -44,10 +44,10 @@ struct Main {
         response.title = preview.title
         response.description = preview.description
         if let prop = preview.property(named: "image") {
-            response.image = AVPreview(property: prop)
+            response.image = MediaMetadata(property: prop)
         }
         if let prop = preview.property(named: "video") {
-            response.video = AVPreview(property: prop)
+            response.video = MediaMetadata(property: prop)
         }
         return response
     }
