@@ -23,6 +23,7 @@ struct MediaMetadata: Codable {
 
 struct LinkPreviewResponse: Codable {
     var title: String?
+    var siteName: String?
     var description: String?
     var canonicalURL: URL?
     var image: MediaMetadata?
@@ -38,6 +39,7 @@ struct Main {
         let preview = try await provider.load(from: url)
 
         var response = LinkPreviewResponse()
+        response.siteName = preview.siteName
         response.audioURL = preview.audioURL
         response.faviconURL = preview.faviconURL
         response.canonicalURL = preview.canonicalURL
