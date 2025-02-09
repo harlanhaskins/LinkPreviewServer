@@ -1,5 +1,5 @@
 import Foundation
-import FlyingFox
+import Vercel
 import LinkPreview
 
 struct MediaMetadata: Codable {
@@ -33,7 +33,7 @@ struct LinkPreviewResponse: Codable {
 }
 
 @main
-struct Main {
+struct Main: ExpressHandler {
     static func fetchLinkPreview(url: URL) async throws -> LinkPreviewResponse {
         let provider = LinkPreviewProvider()
         let preview = try await provider.load(from: url)
@@ -53,30 +53,33 @@ struct Main {
         }
         return response
     }
-    static func main() async throws {
-        let server = HTTPServer(port: 8086)
-        await server.appendRoute("/preview?url=:url") { request in
-            guard var urlString = request.routeParameters["url"] else {
-                return HTTPResponse(statusCode: .badRequest)
+
+    static func configure(router: Router) async throws {
+        router.get("/preview") { req, res in
+            var res = res
+            res = res.cors(origin: "*", methods: [.GET, .OPTIONS, .HEAD], maxAge: .max)
+            if req.method == .OPTIONS {
+                return res.status(.ok).send()
             }
 
+            guard var urlString = req.pathParams["url"] else {
+                return res.status(.badRequest).send()
+            }
             // Prepend HTTPS if not provided
             if !urlString.hasPrefix("http://") && !urlString.hasPrefix("https://") {
                 urlString = "https://\(urlString)"
             }
 
             guard let url = URL(string: urlString) else {
-                return HTTPResponse(statusCode: .badRequest)
+                return res.status(.badRequest).send("Invalid URL: \(urlString)")
             }
 
             let response = try await fetchLinkPreview(url: url)
 
             let data = try JSONEncoder().encode(response)
-            return HTTPResponse(statusCode: .ok, headers: [
-                .contentType: "application/json",
-                .init("Access-Control-Allow-Origin"): "*"
-            ], body: data)
+            return res.status(.ok)
+                .header(.contentType, "application/json")
+                .send(data)
         }
-        try await server.run()
     }
 }

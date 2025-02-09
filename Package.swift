@@ -7,8 +7,8 @@ let package = Package(
     name: "LinkPreviewServer",
     platforms: [.macOS(.v15)],
     dependencies: [
-        .package(url: "https://github.com/harlanhaskins/LinkPreviewSwift.git", branch: "main"),
-        .package(url: "https://github.com/swhitty/FlyingFox.git", from: "0.20.0")
+        .package(url: "https://github.com/harlanhaskins/LinkPreviewSwift.git", from: "0.0.1"),
+        .package(url: "https://github.com/swift-cloud/Vercel", from: "1.2.0")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -16,7 +16,7 @@ let package = Package(
         .executableTarget(
             name: "LinkPreviewServer",
             dependencies: [
-                "FlyingFox",
+                "Vercel",
                 .product(name: "LinkPreview", package: "LinkPreviewSwift")
             ]
         ),
