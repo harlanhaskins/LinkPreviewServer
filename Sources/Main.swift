@@ -73,7 +73,8 @@ struct Main {
 
             let data = try JSONEncoder().encode(response)
             return HTTPResponse(statusCode: .ok, headers: [
-                .contentType: "application/json"
+                .contentType: "application/json",
+                .init("Access-Control-Allow-Origin"): "*"
             ], body: data)
         }
         try await server.run()
