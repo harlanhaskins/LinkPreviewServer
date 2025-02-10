@@ -81,8 +81,14 @@ struct Main: ExpressHandler {
             do {
                 let response = try await fetchLinkPreview(url: url)
                 return try res.status(.ok).send(response)
+            } catch let error as LinkPreviewError {
+                if case .unsuccessfulHTTPStatus(let status, _) = error {
+                    return res.status(.init(code: UInt(status)))
+                } else {
+                    return res.status(.badRequest).send()
+                }
             } catch {
-                return res.status(.badRequest).send("error: \(error)")
+                return res.status(.badRequest).send()
             }
         }
     }
