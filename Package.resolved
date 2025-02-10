@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/harlanhaskins/LinkPreviewSwift.git",
       "state" : {
-        "revision" : "c078e76a6ff9749e5cc3bd6cd71b9b9a6cc6e8bc",
-        "version" : "0.0.1"
+        "revision" : "add701d95cee402c9028a7cf6b5ad1dd3fe11845",
+        "version" : "0.0.4"
       }
     },
     {

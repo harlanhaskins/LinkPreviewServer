@@ -55,16 +55,20 @@ struct Main: ExpressHandler {
     }
 
     static func configure(router: Router) async throws {
+        router.options("/preview") { _, res in
+            res.cors().status(.ok)
+        }
+
         router.get("/preview") { req, res in
-            var res = res
-            res = res.cors(origin: "*", methods: [.GET, .OPTIONS, .HEAD], maxAge: .max)
-            if req.method == .OPTIONS {
-                return res.status(.ok).send()
+            let res = res.cors()
+            guard let components = URLComponents(string: req.path) else {
+                return res.status(.badRequest)
+            }
+            let items = components.queryItems ?? []
+            guard var urlString = items.first(where: { $0.name == "url" })?.value else {
+                return res.status(.badRequest).send("Must provide 'url' parameter")
             }
 
-            guard var urlString = req.pathParams["url"] else {
-                return res.status(.badRequest).send()
-            }
             // Prepend HTTPS if not provided
             if !urlString.hasPrefix("http://") && !urlString.hasPrefix("https://") {
                 urlString = "https://\(urlString)"
@@ -74,12 +78,12 @@ struct Main: ExpressHandler {
                 return res.status(.badRequest).send("Invalid URL: \(urlString)")
             }
 
-            let response = try await fetchLinkPreview(url: url)
-
-            let data = try JSONEncoder().encode(response)
-            return res.status(.ok)
-                .header(.contentType, "application/json")
-                .send(data)
+            do {
+                let response = try await fetchLinkPreview(url: url)
+                return try res.status(.ok).send(response)
+            } catch {
+                return res.status(.badRequest).send("error: \(error)")
+            }
         }
     }
 }
