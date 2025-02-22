@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swift-server/async-http-client",
       "state" : {
-        "revision" : "60fa3dcfc52d09ed0411e9c4bc99928bf63656bd",
-        "version" : "1.24.2"
+        "revision" : "89dc8d0068eb4d3dea050eac6a0c913098c60d97",
+        "version" : "1.25.0"
       }
     },
     {
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/harlanhaskins/LinkPreviewSwift.git",
       "state" : {
-        "revision" : "add701d95cee402c9028a7cf6b5ad1dd3fe11845",
-        "version" : "0.0.4"
+        "revision" : "d347e5132e3fa778b609f96fd1a4ee7c96c0e452",
+        "version" : "0.0.5"
       }
     },
     {
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-algorithms.git",
       "state" : {
-        "revision" : "f6919dfc309e7f1b56224378b11e28bab5bccc42",
-        "version" : "1.2.0"
+        "revision" : "87e50f483c54e6efd60e885f7f5aa946cee68023",
+        "version" : "1.2.1"
       }
     },
     {
@@ -150,8 +150,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio.git",
       "state" : {
-        "revision" : "dff45738d84a53dbc8ee899c306b3a7227f54f89",
-        "version" : "2.80.0"
+        "revision" : "c51907a839e63ebf0ba2076bba73dd96436bd1b9",
+        "version" : "2.81.0"
       }
     },
     {
@@ -231,8 +231,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/vapor",
       "state" : {
-        "revision" : "91d6f94fd9f0e8ca659de2ac3465b7aeaf8ecbdc",
-        "version" : "4.112.1"
+        "revision" : "91efabd62487dcd03a8ed4702deee30550595649",
+        "version" : "4.113.0"
       }
     },
     {
