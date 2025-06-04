@@ -8,7 +8,7 @@ let package = Package(
     platforms: [.macOS(.v15)],
     dependencies: [
         .package(url: "https://github.com/harlanhaskins/LinkPreviewSwift.git", from: "0.0.1"),
-        .package(url: "https://github.com/swift-cloud/Vercel", from: "1.2.0")
+        .package(url: "https://github.com/hummingbird-project/hummingbird", from: "2.13.0"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -16,7 +16,7 @@ let package = Package(
         .executableTarget(
             name: "LinkPreviewServer",
             dependencies: [
-                "Vercel",
+                .product(name: "Hummingbird", package: "hummingbird"),
                 .product(name: "LinkPreview", package: "LinkPreviewSwift")
             ]
         ),

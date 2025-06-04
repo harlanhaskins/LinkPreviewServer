@@ -1,5 +1,5 @@
 import Foundation
-import Vercel
+import Hummingbird
 import LinkPreview
 
 struct MediaMetadata: Codable {
@@ -21,7 +21,7 @@ struct MediaMetadata: Codable {
     }
 }
 
-struct LinkPreviewResponse: Codable {
+struct LinkPreviewResponse: Codable, ResponseCodable {
     var title: String?
     var siteName: String?
     var description: String?
@@ -33,7 +33,7 @@ struct LinkPreviewResponse: Codable {
 }
 
 @main
-struct Main: ExpressHandler {
+struct Main {
     static func fetchLinkPreview(url: URL) async throws -> LinkPreviewResponse {
         let provider = LinkPreviewProvider()
         let preview = try await provider.load(from: url)
@@ -54,19 +54,34 @@ struct Main: ExpressHandler {
         return response
     }
 
-    static func configure(router: Router) async throws {
-        router.options("/preview") { _, res in
-            res.cors().status(.ok)
+    static func main() async throws {
+        let router = Router()
+            .addMiddleware {
+                RequestLoggerMiddleware()
+                CORSMiddleware(
+                    allowOrigin: .originBased,
+                    allowHeaders: [.accept, .authorization, .contentType, .origin],
+                    allowMethods: [.get, .options]
+                )
+            }
+
+        configure(router: router)
+
+        let app = Application(
+            router: router,
+            configuration: .init(address: .hostname("127.0.0.1", port: 8080))
+        )
+        try await app.runService()
+    }
+
+    static func configure(router: some RouterMethods) {
+        router.on("/preview", method: .options) { _, _ in
+            Response(status: .ok)
         }
 
-        router.get("/preview") { req, res in
-            let res = res.cors()
-            guard let components = URLComponents(string: req.path) else {
-                return res.status(.badRequest)
-            }
-            let items = components.queryItems ?? []
-            guard var urlString = items.first(where: { $0.name == "url" })?.value else {
-                return res.status(.badRequest).send("Must provide 'url' parameter")
+        router.get("/preview") { req, ctx in
+            guard var urlString = req.uri.queryParameters["url"] else {
+                throw HTTPError(.badRequest, message: "Must provide 'url' parameter")
             }
 
             // Prepend HTTPS if not provided
@@ -74,17 +89,16 @@ struct Main: ExpressHandler {
                 urlString = "https://\(urlString)"
             }
 
-            guard let url = URL(string: urlString) else {
-                return res.status(.badRequest).send("Invalid URL: \(urlString)")
+            guard let url = URL(string: String(urlString)) else {
+                throw HTTPError(.badRequest, message: "Invalid URL: \(urlString)")
             }
 
             do {
-                let response = try await fetchLinkPreview(url: url)
-                return try res.status(.ok).send(response)
+                return try await fetchLinkPreview(url: url)
             } catch {
                 var response = LinkPreviewResponse()
                 response.canonicalURL = url
-                return try res.status(.ok).send(response)
+                return response
             }
         }
     }
