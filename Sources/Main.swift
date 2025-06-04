@@ -55,9 +55,15 @@ struct Main {
     }
 
     static func main() async throws {
+        let webDir = URL(filePath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appending(path: "Web")
+
         let router = Router()
             .addMiddleware {
                 RequestLoggerMiddleware()
+                FileMiddleware(webDir.path, searchForIndexHtml: true)
                 CORSMiddleware(
                     allowOrigin: .originBased,
                     allowHeaders: [.accept, .authorization, .contentType, .origin],
@@ -65,7 +71,8 @@ struct Main {
                 )
             }
 
-        configure(router: router)
+        let apiRoutes = router.group("api")
+        configure(router: apiRoutes)
 
         let app = Application(
             router: router,
