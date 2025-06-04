@@ -69,7 +69,7 @@ struct Main {
 
         let app = Application(
             router: router,
-            configuration: .init(address: .hostname("127.0.0.1", port: 8080))
+            configuration: .init(address: .hostname("127.0.0.1", port: 8077))
         )
         try await app.runService()
     }
